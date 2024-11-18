@@ -2,7 +2,6 @@ package ru.samsung.itschool.mdev.homework;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,17 +13,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.Random;
+import org.robolectric.android.controller.ActivityController;
 
 @RunWith(RobolectricTestRunner.class)
 public class ExampleUnitTest {
-    public static final String ZERO = "0";
-    public static final String NEG_ONE_ = "-1.0";
-    public static final String ZERO_ = "0.0";
-    public static final String ONE_ = "1.0";
-    public static final String TWO_ = "2.0";
+    public static final String ZERO = "0.0";
+    public static final String NEG_ONE = "-1.0";
+    public static final String ONE = "1.0";
+    public static final String TWO = "2.0";
     public static final String ANY = "any";
     public static final String NONE = "none";
-    private MainActivity activity;
     static StringBuffer sb;
     static int salt;
 
@@ -35,17 +33,10 @@ public class ExampleUnitTest {
         sb.append(String.format("%03d", salt));
     }
 
-    @Before
-    public void setup() {
-        activity = Robolectric.buildActivity(MainActivity.class)
-                .create().get();
-    }
-
     @Test
-    public void testButton1() throws Exception {
-        try {
-            MainActivity activity = Robolectric.buildActivity(MainActivity.class)
-                    .create().get();
+    public void testButton1() {
+        try (ActivityController<MainActivity> ctrl = Robolectric.buildActivity(MainActivity.class)) {
+            MainActivity activity = ctrl.create().get();
             Button view = activity.findViewById(R.id.run);
             Assert.assertNotNull(view);
             EditText et_a = activity.findViewById(R.id.a);
@@ -62,15 +53,14 @@ public class ExampleUnitTest {
             view.performClick();
             org.junit.Assert.assertEquals(tv.getText().toString(), ANY);
             sb.append(",OK");
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
     }
 
     @Test
-    public void testButton2() throws Exception {
-        try {
-            MainActivity activity = Robolectric.buildActivity(MainActivity.class)
-                    .create().get();
+    public void testButton2() {
+        try (ActivityController<MainActivity> ctrl = Robolectric.buildActivity(MainActivity.class)) {
+            MainActivity activity = ctrl.create().get();
             Button view = activity.findViewById(R.id.run);
             Assert.assertNotNull(view);
             EditText et_a = activity.findViewById(R.id.a);
@@ -81,13 +71,13 @@ public class ExampleUnitTest {
             Assert.assertNotNull(et_c);
             TextView tv = activity.findViewById(R.id.res);
             Assert.assertNotNull(tv);
-            et_a.setText(NEG_ONE_);
-            et_b.setText(TWO_);
+            et_a.setText(NEG_ONE);
+            et_b.setText(TWO);
             et_c.setText(ZERO);
             view.performClick();
-            String s[] = tv.getText().toString().trim().replaceAll(" +", " ").split(" ");
-            double r1 = Double.valueOf(s[0]);
-            double r2 = Double.valueOf(s[1]);
+            String[] s = tv.getText().toString().trim().replaceAll(" +", " ").split(" ");
+            double r1 = Double.parseDouble(s[0]);
+            double r2 = Double.parseDouble(s[1]);
             if (r1 > r2) {
                 org.junit.Assert.assertEquals(2, r1, 0.001);
                 org.junit.Assert.assertEquals(0, r2, 0.001);
@@ -96,15 +86,14 @@ public class ExampleUnitTest {
                 org.junit.Assert.assertEquals(2, r2, 0.001);
             }
             sb.append(",OK");
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
     }
 
     @Test
-    public void testButton3() throws Exception {
-        try {
-            MainActivity activity = Robolectric.buildActivity(MainActivity.class)
-                    .create().get();
+    public void testButton3() {
+        try (ActivityController<MainActivity> ctrl = Robolectric.buildActivity(MainActivity.class)) {
+            MainActivity activity = ctrl.create().get();
             Button view = activity.findViewById(R.id.run);
             Assert.assertNotNull(view);
             EditText et_a = activity.findViewById(R.id.a);
@@ -115,19 +104,19 @@ public class ExampleUnitTest {
             Assert.assertNotNull(et_c);
             TextView tv = activity.findViewById(R.id.res);
             Assert.assertNotNull(tv);
-            et_a.setText(ONE_);
-            et_b.setText(TWO_);
-            et_c.setText(TWO_);
+            et_a.setText(ONE);
+            et_b.setText(TWO);
+            et_c.setText(TWO);
             view.performClick();
             org.junit.Assert.assertEquals(tv.getText().toString(), NONE);
             sb.append(",OK");
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
     }
 
     @AfterClass
     public static void printResult() {
-        System.err.println("\n\n=============================\nВАШ РЕЗУЛЬТАТ: " + sb.toString().hashCode() + "" + salt + "\n=============================\n");
+        System.err.println("\n\n=============================\nВАШ РЕЗУЛЬТАТ: " + sb.toString().hashCode() + salt + "\n=============================\n");
 
     }
 }

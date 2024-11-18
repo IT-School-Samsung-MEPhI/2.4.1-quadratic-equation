@@ -10,8 +10,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
-        android:text="@string/title" />
+        android:text="@string/title"
+        android:textSize="24sp" />
 
     <EditText
         android:id="@+id/a"
@@ -40,10 +40,11 @@
         android:layout_height="wrap_content"
         android:onClick="solve"
         android:text="@string/calculate" />
+
     <TextView
+        android:id="@+id/res"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24dp"
-        android:id="@+id/res"/>
+        android:textSize="24sp" />
 
 </LinearLayout>
